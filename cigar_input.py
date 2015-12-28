@@ -75,12 +75,14 @@ if __name__ == '__main__':
     elif 'perfecto' in imagePath:
       labelVec = [0,1,0,0]
 
-    img = load_images(imagePath)
+    # if we load one image at a time, this is much faster than load_images()
+    img = np.asarray(Image.open(imagePath)).ravel()
+
     features[i,:] = img
     labels[i,:] = labelVec
 
-  print(labels[:i,:])
-  print(features[:i,:])
+  print(labels.shape)
+  print(features.shape)
 
 
 
