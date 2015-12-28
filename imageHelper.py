@@ -53,11 +53,24 @@ def convert_color_of_img(imgFile, color):
 def flip_image(imgFile, direction):
     '''
     imgFile: The absolute path to an image, or a JpegImageFile
-    direction: Image.function for the PIL transpose
+    direction: String of value lr, tb, r90, r180, or r270, depending on the
+        desired tranformations
         Image.FLIP_LEFT_RIGHT, Image.FLIP_TOP_BOTTOM, Image.ROTATE_90,
         Image.ROTATE_180, or Image.ROTATE_270
     '''
-    return Image.open(imgFile).transpose(direction)
+    img = Image.open(imgFile)
+    # I hate no case statements
+    if direction == 'lr':
+        img = img.transpose(Image.FLIP_LEFT_RIGHT)
+    elif direction == 'tb':
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)
+    elif direction == 'r90':
+        img = img.transpose(Image.ROTATE_90)
+    elif direction == 'r180':
+        img = img.transpose(Image.ROTATE_180)
+    elif direction == 'r270':
+        img = img.transpose(Image.ROTATE_270)
+    return img
 
 if __name__ == '__main__':
     dir = sys.argv[1]
