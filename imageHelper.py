@@ -4,8 +4,8 @@ from PIL import Image
 
 def resize_img(imgFile,newSize):
     '''
-    imgFile: is the absolute path to an image, or an JpegImageFile
-    newSize: is max pixel W and H of new image as an integer tuple
+    imgFile: String. Is the absolute path to an image, or an JpegImageFile
+    newSize: Integer Tuple. Is max pixel W and H of new image
     '''
     if isinstance(imgFile, str):
         img = Image.open(imgFile)
@@ -17,9 +17,9 @@ def resize_img(imgFile,newSize):
 
 def paste_img_on_background(imgFile, backgroundSize):
     '''
-    imgFile: is the absolute path to an image, or an JpegImageFile
-    backgroundSize: is the size of the background onto which
-    the image from imgFile is pasted as an integer tuple
+    imgFile: String. Is the absolute path to an image, or an JpegImageFile
+    backgroundSize: Integer Tuple. Is the size of the background onto which
+    the image from imgFile is pasted
     '''
     if isinstance(imgFile, str):
         img = Image.open(imgFile)
@@ -35,8 +35,8 @@ def paste_img_on_background(imgFile, backgroundSize):
 
 def convert_color_of_img(imgFile, color):
     '''
-    imgFile: is the absolute path to an image, or an JpegImageFile
-    color: string is either 'RGB' or 'gray' or 'bw'
+    imgFile: String. The absolute path to an image, or an JpegImageFile
+    color: String. Is either 'RGB' or 'gray' or 'bw'
     '''
     if isinstance(imgFile, str):
         img = Image.open(imgFile)
@@ -49,11 +49,30 @@ def convert_color_of_img(imgFile, color):
     elif color == 'bw':
         img = img.convert('1')
     return img
-
+    
+def flip_image(imgFile, direction):
+    '''
+    imgFile: String. The absolute path to an image, or a JpegImageFile
+    direction: String. Can be lr, tb, r90, r180, or r270, depending on the
+        desired tranformations
+    '''
+    img = Image.open(imgFile)
+    # I hate no case statements
+    if direction == 'lr':
+        img = img.transpose(Image.FLIP_LEFT_RIGHT)
+    elif direction == 'tb':
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)
+    elif direction == 'r90':
+        img = img.transpose(Image.ROTATE_90)
+    elif direction == 'r180':
+        img = img.transpose(Image.ROTATE_180)
+    elif direction == 'r270':
+        img = img.transpose(Image.ROTATE_270)
+    return img
 
 if __name__ == '__main__':
     dir = sys.argv[1]
-
+    
     for infile in glob.glob(dir + '*.jpg'):
         # read in file and split path apart
         file, ext = os.path.splitext(infile)
