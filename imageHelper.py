@@ -4,8 +4,8 @@ from PIL import Image
 
 def resize_img(imgFile,newSize):
     '''
-    imgFile: is the absolute path to an image, or an JpegImageFile
-    newSize: is max pixel W and H of new image as an integer tuple
+    imgFile: String. Is the absolute path to an image, or an JpegImageFile
+    newSize: Integer Tuple. Is max pixel W and H of new image
     '''
     if isinstance(imgFile, str):
         img = Image.open(imgFile)
@@ -17,9 +17,9 @@ def resize_img(imgFile,newSize):
 
 def paste_img_on_background(imgFile, backgroundSize):
     '''
-    imgFile: is the absolute path to an image, or an JpegImageFile
-    backgroundSize: is the size of the background onto which
-    the image from imgFile is pasted as an integer tuple
+    imgFile: String. Is the absolute path to an image, or an JpegImageFile
+    backgroundSize: Integer Tuple. Is the size of the background onto which
+    the image from imgFile is pasted
     '''
     if isinstance(imgFile, str):
         img = Image.open(imgFile)
@@ -35,8 +35,8 @@ def paste_img_on_background(imgFile, backgroundSize):
 
 def convert_color_of_img(imgFile, color):
     '''
-    imgFile: is the absolute path to an image, or an JpegImageFile
-    color: string is either 'RGB' or 'gray' or 'bw'
+    imgFile: String. The absolute path to an image, or an JpegImageFile
+    color: String. Is either 'RGB' or 'gray' or 'bw'
     '''
     if isinstance(imgFile, str):
         img = Image.open(imgFile)
@@ -52,11 +52,9 @@ def convert_color_of_img(imgFile, color):
     
 def flip_image(imgFile, direction):
     '''
-    imgFile: The absolute path to an image, or a JpegImageFile
-    direction: String of value lr, tb, r90, r180, or r270, depending on the
+    imgFile: String. The absolute path to an image, or a JpegImageFile
+    direction: String. Can be lr, tb, r90, r180, or r270, depending on the
         desired tranformations
-        Image.FLIP_LEFT_RIGHT, Image.FLIP_TOP_BOTTOM, Image.ROTATE_90,
-        Image.ROTATE_180, or Image.ROTATE_270
     '''
     img = Image.open(imgFile)
     # I hate no case statements
