@@ -4,8 +4,8 @@ from PIL import Image
 
 def resize_img(imgFile,newSize):
     '''
-    imgFile is the absolute path to an image, or an JpegImageFile
-    newSize is max pixel W and H of new image
+    imgFile: is the absolute path to an image, or an JpegImageFile
+    newSize: is max pixel W and H of new image as an integer tuple
     '''
     if isinstance(imgFile, str):
         img = Image.open(imgFile)
@@ -17,9 +17,9 @@ def resize_img(imgFile,newSize):
 
 def paste_img_on_background(imgFile, backgroundSize):
     '''
-    imgFile is the absolute path to an image, or an JpegImageFile
-    backgroundSize is the size of the background onto which
-    the image from imgFile is pasted
+    imgFile: is the absolute path to an image, or an JpegImageFile
+    backgroundSize: is the size of the background onto which
+    the image from imgFile is pasted as an integer tuple
     '''
     if isinstance(imgFile, str):
         img = Image.open(imgFile)
@@ -35,8 +35,8 @@ def paste_img_on_background(imgFile, backgroundSize):
 
 def convert_color_of_img(imgFile, color):
     '''
-    imgFile is the absolute path to an image, or an JpegImageFile
-    color is either 'RGB' or 'gray' or 'bw'
+    imgFile: is the absolute path to an image, or an JpegImageFile
+    color: string is either 'RGB' or 'gray' or 'bw'
     '''
     if isinstance(imgFile, str):
         img = Image.open(imgFile)
