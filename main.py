@@ -1,6 +1,14 @@
 # # Import data from mnist to get images
-# from tensorflow.examples.tutorials.mnist import input_data
-# mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+
+print(type(mnist.test.images))
+sys.exit()
+
+
+
+
+
 
 import tensorflow as tf
 

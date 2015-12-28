@@ -1,0 +1,428 @@
+josh@yoga:~$ 
+josh@yoga:~$ 
+josh@yoga:~$ 
+josh@yoga:~$ 
+josh@yoga:~$ 
+josh@yoga:~$ cd git/CigarID/
+josh@yoga:~/git/CigarID$ dirs
+~/git/CigarID
+josh@yoga:~/git/CigarID$ python3 cigar_input.py /home/josh/Desktop/pics/torpedo/1_org/
+Traceback (most recent call last):
+  File "cigar_input.py", line 29, in <module>
+    filenames = os.listdir(dir)[:1]
+TypeError: argument should be string, bytes or integer, not builtin_function_or_method
+josh@yoga:~/git/CigarID$ python3 cigar_input.py /home/josh/Desktop/pics/torpedo/1_org/
+Traceback (most recent call last):
+  File "cigar_input.py", line 29, in <module>
+    filenames = os.listdir(dir)
+TypeError: argument should be string, bytes or integer, not builtin_function_or_method
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ python3 cigar_input.py /home/josh/Desktop/pics/torpedo/1_org/
+I tensorflow/core/common_runtime/local_device.cc:40] Local device intra op parallelism threads: 4
+I tensorflow/core/common_runtime/direct_session.cc:58] Direct session inter op parallelism threads: 4
+Traceback (most recent call last):
+  File "cigar_input.py", line 47, in <module>
+    image = img.eval() #here is your image Tensor :) 
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 460, in eval
+    return _eval_using_default_session(self, feed_dict, self.graph, session)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 2896, in _eval_using_default_session
+    raise ValueError("Cannot evaluate tensor using eval(): No default "
+ValueError: Cannot evaluate tensor using eval(): No default session is registered. Use `with sess.as_default()` or pass an explicit session to eval(session=sess)
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ python3 cigar_input.py /home/josh/Desktop/pics/torpedo/1_org/
+I tensorflow/core/common_runtime/local_device.cc:40] Local device intra op parallelism threads: 4
+I tensorflow/core/common_runtime/direct_session.cc:58] Direct session inter op parallelism threads: 4
+Traceback (most recent call last):
+  File "cigar_input.py", line 48, in <module>
+    image = img.eval() #here is your image Tensor :) 
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 460, in eval
+    return _eval_using_default_session(self, feed_dict, self.graph, session)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 2910, in _eval_using_default_session
+    return session.run(tensors, feed_dict)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/client/session.py", line 302, in run
+    raise RuntimeError('Attempted to use a closed Session.')
+RuntimeError: Attempted to use a closed Session.
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ python3 cigar_input.py /home/josh/Desktop/pics/torpedo/1_org/
+I tensorflow/core/common_runtime/local_device.cc:40] Local device intra op parallelism threads: 4
+I tensorflow/core/common_runtime/direct_session.cc:58] Direct session inter op parallelism threads: 4
+W tensorflow/core/common_runtime/executor.cc:1076] 0x2a3d0c0 Compute status: Not found: images (51).jpg
+	 [[Node: ReaderRead = ReaderRead[_device="/job:localhost/replica:0/task:0/cpu:0"](WholeFileReader, input_producer)]]
+W tensorflow/core/common_runtime/executor.cc:1076] 0x7f68cc002330 Compute status: Cancelled: Enqueue operation was cancelled
+	 [[Node: input_producer/input_producer_EnqueueMany = QueueEnqueueMany[Tcomponents=[DT_STRING], timeout_ms=-1, _device="/job:localhost/replica:0/task:0/cpu:0"](input_producer, input_producer/RandomShuffle)]]
+I tensorflow/core/kernels/queue_base.cc:278] Skipping cancelled enqueue attempt
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/client/session.py", line 428, in _do_run
+    target_list)
+tensorflow.python.pywrap_tensorflow.StatusNotOK: Not found: images (51).jpg
+	 [[Node: ReaderRead = ReaderRead[_device="/job:localhost/replica:0/task:0/cpu:0"](WholeFileReader, input_producer)]]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "cigar_input.py", line 47, in <module>
+    image = img.eval() #here is your image Tensor :) 
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 460, in eval
+    return _eval_using_default_session(self, feed_dict, self.graph, session)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 2910, in _eval_using_default_session
+    return session.run(tensors, feed_dict)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/client/session.py", line 368, in run
+    results = self._do_run(target_list, unique_fetch_targets, feed_dict_string)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/client/session.py", line 444, in _do_run
+    e.code)
+tensorflow.python.framework.errors.NotFoundError: images (51).jpg
+	 [[Node: ReaderRead = ReaderRead[_device="/job:localhost/replica:0/task:0/cpu:0"](WholeFileReader, input_producer)]]
+Caused by op 'ReaderRead', defined at:
+  File "cigar_input.py", line 33, in <module>
+    key, value = reader.read(filename_queue)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/ops/io_ops.py", line 320, in read
+    return gen_io_ops._reader_read(self._reader_ref, queue_ref, name=name)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/ops/gen_io_ops.py", line 142, in _reader_read
+    queue_handle=queue_handle, name=name)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/ops/op_def_library.py", line 664, in apply_op
+    op_def=op_def)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 1834, in create_op
+    original_op=self._default_original_op, op_def=op_def)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 1043, in __init__
+    self._traceback = _extract_stack()
+
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ python3 cigar_input.py /home/josh/Desktop/pics/torpedo/1_org/
+I tensorflow/core/common_runtime/local_device.cc:40] Local device intra op parallelism threads: 4
+I tensorflow/core/common_runtime/direct_session.cc:58] Direct session inter op parallelism threads: 4
+W tensorflow/core/common_runtime/executor.cc:1076] 0x1cf0780 Compute status: Not found: Nub-Maduro-464-Torpedo-1.jpg
+	 [[Node: ReaderRead = ReaderRead[_device="/job:localhost/replica:0/task:0/cpu:0"](WholeFileReader, input_producer)]]
+W tensorflow/core/common_runtime/executor.cc:1076] 0x7fe748002d10 Compute status: Cancelled: Enqueue operation was cancelled
+	 [[Node: input_producer/input_producer_EnqueueMany = QueueEnqueueMany[Tcomponents=[DT_STRING], timeout_ms=-1, _device="/job:localhost/replica:0/task:0/cpu:0"](input_producer, input_producer/RandomShuffle)]]
+I tensorflow/core/kernels/queue_base.cc:278] Skipping cancelled enqueue attempt
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/client/session.py", line 428, in _do_run
+    target_list)
+tensorflow.python.pywrap_tensorflow.StatusNotOK: Not found: Nub-Maduro-464-Torpedo-1.jpg
+	 [[Node: ReaderRead = ReaderRead[_device="/job:localhost/replica:0/task:0/cpu:0"](WholeFileReader, input_producer)]]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "cigar_input.py", line 47, in <module>
+    image = img.eval() #here is your image Tensor :) 
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 460, in eval
+    return _eval_using_default_session(self, feed_dict, self.graph, session)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 2910, in _eval_using_default_session
+    return session.run(tensors, feed_dict)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/client/session.py", line 368, in run
+    results = self._do_run(target_list, unique_fetch_targets, feed_dict_string)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/client/session.py", line 444, in _do_run
+    e.code)
+tensorflow.python.framework.errors.NotFoundError: Nub-Maduro-464-Torpedo-1.jpg
+	 [[Node: ReaderRead = ReaderRead[_device="/job:localhost/replica:0/task:0/cpu:0"](WholeFileReader, input_producer)]]
+Caused by op 'ReaderRead', defined at:
+  File "cigar_input.py", line 33, in <module>
+    key, value = reader.read(filename_queue)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/ops/io_ops.py", line 320, in read
+    return gen_io_ops._reader_read(self._reader_ref, queue_ref, name=name)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/ops/gen_io_ops.py", line 142, in _reader_read
+    queue_handle=queue_handle, name=name)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/ops/op_def_library.py", line 664, in apply_op
+    op_def=op_def)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 1834, in create_op
+    original_op=self._default_original_op, op_def=op_def)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 1043, in __init__
+    self._traceback = _extract_stack()
+
+josh@yoga:~/git/CigarID$ I tensorflow/core/kernels/queue_base.cc:278] Skipping cancelled enqueue attempt  C-c C-c
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ python3 cigar_input.py /home/josh/Desktop/pics/torpedo/1_org/
+I tensorflow/core/common_runtime/local_device.cc:40] Local device intra op parallelism threads: 4
+I tensorflow/core/common_runtime/direct_session.cc:58] Direct session inter op parallelism threads: 4
+W tensorflow/core/common_runtime/executor.cc:1076] 0x2ee4bc0 Compute status: Not found: /home/josh/git/CigarID/images.jpg
+	 [[Node: ReaderRead = ReaderRead[_device="/job:localhost/replica:0/task:0/cpu:0"](WholeFileReader, input_producer)]]
+W tensorflow/core/common_runtime/executor.cc:1076] 0x7f7dc4002a60 Compute status: Cancelled: Enqueue operation was cancelled
+	 [[Node: input_producer/input_producer_EnqueueMany = QueueEnqueueMany[Tcomponents=[DT_STRING], timeout_ms=-1, _device="/job:localhost/replica:0/task:0/cpu:0"](input_producer, input_producer/RandomShuffle)]]
+I tensorflow/core/kernels/queue_base.cc:278] Skipping cancelled enqueue attempt
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/client/session.py", line 428, in _do_run
+    target_list)
+tensorflow.python.pywrap_tensorflow.StatusNotOK: Not found: /home/josh/git/CigarID/images.jpg
+	 [[Node: ReaderRead = ReaderRead[_device="/job:localhost/replica:0/task:0/cpu:0"](WholeFileReader, input_producer)]]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "cigar_input.py", line 48, in <module>
+    image = img.eval() #here is your image Tensor :) 
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 460, in eval
+    return _eval_using_default_session(self, feed_dict, self.graph, session)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 2910, in _eval_using_default_session
+    return session.run(tensors, feed_dict)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/client/session.py", line 368, in run
+    results = self._do_run(target_list, unique_fetch_targets, feed_dict_string)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/client/session.py", line 444, in _do_run
+    e.code)
+tensorflow.python.framework.errors.NotFoundError: /home/josh/git/CigarID/images.jpg
+	 [[Node: ReaderRead = ReaderRead[_device="/job:localhost/replica:0/task:0/cpu:0"](WholeFileReader, input_producer)]]
+Caused by op 'ReaderRead', defined at:
+  File "cigar_input.py", line 34, in <module>
+    key, value = reader.read(filename_queue)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/ops/io_ops.py", line 320, in read
+    return gen_io_ops._reader_read(self._reader_ref, queue_ref, name=name)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/ops/gen_io_ops.py", line 142, in _reader_read
+    queue_handle=queue_handle, name=name)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/ops/op_def_library.py", line 664, in apply_op
+    op_def=op_def)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 1834, in create_op
+    original_op=self._default_original_op, op_def=op_def)
+  File "/usr/local/lib/python3.4/dist-packages/tensorflow/python/framework/ops.py", line 1043, in __init__
+    self._traceback = _extract_stack()
+
+josh@yoga:~/git/CigarID$   File "cigar_input.py", line 48, in <module>  C-c C-c
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ python3 cigar_input.py /home/josh/Desktop/pics/torpedo/1_org/
+I tensorflow/core/common_runtime/local_device.cc:40] Local device intra op parallelism threads: 4
+I tensorflow/core/common_runtime/direct_session.cc:58] Direct session inter op parallelism threads: 4
+[[[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]
+
+ [[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]
+
+ [[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]
+
+ ..., 
+ [[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]
+
+ [[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]
+
+ [[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]]
+(128, 128, 1)
+W tensorflow/core/common_runtime/executor.cc:1076] 0x7ffb88002730 Compute status: Cancelled: Enqueue operation was cancelled
+	 [[Node: input_producer/input_producer_EnqueueMany = QueueEnqueueMany[Tcomponents=[DT_STRING], timeout_ms=-1, _device="/job:localhost/replica:0/task:0/cpu:0"](input_producer, input_producer/RandomShuffle)]]
+I tensorflow/core/kernels/queue_base.cc:278] Skipping cancelled enqueue attempt
+Traceback (most recent call last):
+  File "cigar_input.py", line 52, in <module>
+    Image.show(Image.fromarray(np.asarray(image)))
+NameError: name 'Image' is not defined
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ python3 cigar_input.py /home/josh/Desktop/pics/torpedo/1_org/
+I tensorflow/core/common_runtime/local_device.cc:40] Local device intra op parallelism threads: 4
+I tensorflow/core/common_runtime/direct_session.cc:58] Direct session inter op parallelism threads: 4
+[[[254 254 254]
+  [254 254 254]
+  [254 254 254]
+  ..., 
+  [254 254 254]
+  [254 254 254]
+  [254 254 254]]
+
+ [[254 254 254]
+  [254 254 254]
+  [254 254 254]
+  ..., 
+  [254 254 254]
+  [254 254 254]
+  [254 254 254]]
+
+ [[254 254 254]
+  [254 254 254]
+  [254 254 254]
+  ..., 
+  [254 254 254]
+  [254 254 254]
+  [254 254 254]]
+
+ ..., 
+ [[246 252 250]
+  [247 255 255]
+  [247 255 255]
+  ..., 
+  [254 254 254]
+  [254 254 254]
+  [254 254 254]]
+
+ [[242 252 251]
+  [246 255 255]
+  [247 255 255]
+  ..., 
+  [254 254 254]
+  [254 254 254]
+  [254 254 254]]
+
+ [[242 254 254]
+  [244 255 255]
+  [242 255 255]
+  ..., 
+  [254 254 254]
+  [254 254 254]
+  [254 254 254]]]
+(160, 280, 3)
+W tensorflow/core/common_runtime/executor.cc:1076] 0x7f09940020f0 Compute status: Cancelled: Enqueue operation was cancelled
+	 [[Node: input_producer/input_producer_EnqueueMany = QueueEnqueueMany[Tcomponents=[DT_STRING], timeout_ms=-1, _device="/job:localhost/replica:0/task:0/cpu:0"](input_producer, input_producer/RandomShuffle)]]
+I tensorflow/core/kernels/queue_base.cc:278] Skipping cancelled enqueue attempt
+Traceback (most recent call last):
+  File "cigar_input.py", line 52, in <module>
+    Image.show(Image.fromarray(np.asarray(image)))
+NameError: name 'Image' is not defined
+josh@yoga:~/git/CigarID$   [254 254 254]  C-c C-c
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$   [254 254 254]
+[254: command not found
+josh@yoga:~/git/CigarID$ python3 cigar_input.py /home/josh/Desktop/pics/torpedo/1_org/
+I tensorflow/core/common_runtime/local_device.cc:40] Local device intra op parallelism threads: 4
+I tensorflow/core/common_runtime/direct_session.cc:58] Direct session inter op parallelism threads: 4
+[[[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]
+
+ [[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]
+
+ [[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]
+
+ ..., 
+ [[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]
+
+ [[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]
+
+ [[0]
+  [0]
+  [0]
+  ..., 
+  [0]
+  [0]
+  [0]]]
+(128, 128, 1)
+W tensorflow/core/common_runtime/executor.cc:1076] 0x7fa52c002450 Compute status: Cancelled: Enqueue operation was cancelled
+	 [[Node: input_producer/input_producer_EnqueueMany = QueueEnqueueMany[Tcomponents=[DT_STRING], timeout_ms=-1, _device="/job:localhost/replica:0/task:0/cpu:0"](input_producer, input_producer/RandomShuffle)]]
+I tensorflow/core/kernels/queue_base.cc:278] Skipping cancelled enqueue attempt
+Traceback (most recent call last):
+  File "cigar_input.py", line 53, in <module>
+    Image.show(Image.fromarray(np.asarray(image)))
+AttributeError: 'module' object has no attribute 'show'
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ I tensorflow/core/kernels/queue_base.cc:278] Skipping cancelled enqueue attempt
+I: command not found
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
+josh@yoga:~/git/CigarID$ 
