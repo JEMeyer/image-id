@@ -49,11 +49,19 @@ def convert_color_of_img(imgFile, color):
     elif color == 'bw':
         img = img.convert('1')
     return img
-
+    
+def flip_image(imgFile, direction):
+    '''
+    imgFile: The absolute path to an image, or a JpegImageFile
+    direction: Image.function for the PIL transpose
+        Image.FLIP_LEFT_RIGHT, Image.FLIP_TOP_BOTTOM, Image.ROTATE_90,
+        Image.ROTATE_180, or Image.ROTATE_270
+    '''
+    return Image.open(imgFile).transpose(direction)
 
 if __name__ == '__main__':
     dir = sys.argv[1]
-
+    
     for infile in glob.glob(dir + '*.jpg'):
         # read in file and split path apart
         file, ext = os.path.splitext(infile)
