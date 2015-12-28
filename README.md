@@ -2,7 +2,7 @@ Implementation of Google's TensorFlow library for Cigar image recognition. Will 
 
 Initial Neural Net will be a simple NN with no convolution or pooling. After this NN is working, convulution and pooling layers will be added.
 
-Required libraries:
+Dependencies:
 + NumPy
 + MatPlotLib
 + TensorFlow
