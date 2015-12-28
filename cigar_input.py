@@ -4,8 +4,9 @@ import os
 from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
+import glob
 
-def read_cigar(path):
+def load_images(path):
   '''
   imput:
     path: a path to a dir or image file
@@ -32,16 +33,17 @@ def read_cigar(path):
     # start populating the filename queue
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(coord=coord)
+
     images=[]
     for i in range(len(filenames)):
       image = img.eval()
-      print('image.shape '+ str(image.shape))
-      plot_image(image)
-      images.append(image)
+      # print('image.shape '+ str(image.shape))
+      images.append(image.ravel())
+
     coord.request_stop()
     coord.join(threads)
 
-  images = np.asarray(images)
+  images = np.matrix(images)
   print('total images read: ' + str(len(images)))
   return(images)
 
@@ -56,8 +58,29 @@ def plot_image(image):
   elif image.shape[2] == 1:
     print('GRAYSCALE IMAGE... dont know how to show')
 
+
 if __name__ == '__main__':
   import sys
   path = sys.argv[1]
 
-  imageData = read_cigar(path)
+  filePaths = glob.glob(path + '*.jpg')
+  numImgs = len(filePaths)
+
+  labels = np.empty(shape = (numImgs,4))
+  features = np.empty(shape = (numImgs,16384))
+
+  for i,imagePath in enumerate(filePaths):
+    if 'torpedo' in imagePath:
+      labelVec = [1,0,0,0]
+    elif 'perfecto' in imagePath:
+      labelVec = [0,1,0,0]
+
+    img = load_images(imagePath)
+    features[i,:] = img
+    labels[i,:] = labelVec
+
+  print(labels[:i,:])
+  print(features[:i,:])
+
+
+
