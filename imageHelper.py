@@ -80,9 +80,26 @@ if __name__ == '__main__':
         abspath = os.path.dirname(file)
 
         # do relevant tranformations on image
-        smallImg = resize_img(infile, newSize=(128,128))
-        squareImg = paste_img_on_background(smallImg,backgroundSize=(128,128))
-        newImg = convert_color_of_img(squareImg,'gray')
-
+        #smallImg = resize_img(infile, newSize=(128,128))
+        #squareImg = paste_img_on_background(smallImg,backgroundSize=(128,128))
+        #newImg = convert_color_of_img(squareImg,'gray')
+        newImg = flip_image(infile, 'lr')
         # save new image
-        newImg.save(os.path.join(abspath, '_new_' + base + '.jpg'), 'JPEG')
+        newImg.save(os.path.join(abspath, '_lr_' + base + '.jpg'), 'JPEG')
+        #newImg = convert_color_of_img(squareImg,'gray')
+        newImg = flip_image(infile, 'tb')
+        # save new image
+        newImg.save(os.path.join(abspath, '_tb_' + base + '.jpg'), 'JPEG')
+        #newImg = convert_color_of_img(squareImg,'gray')
+        newImg = flip_image(infile, 'r90')
+        # save new image
+        newImg.save(os.path.join(abspath, '_r90_' + base + '.jpg'), 'JPEG')
+        #newImg = convert_color_of_img(squareImg,'gray')
+        newImg = flip_image(infile, 'r180')
+        # save new image
+        newImg.save(os.path.join(abspath, '_r180_' + base + '.jpg'), 'JPEG')
+        #newImg = convert_color_of_img(squareImg,'gray')
+        newImg = flip_image(infile, 'r270')
+        # save new image
+        newImg.save(os.path.join(abspath, '_r270_' + base + '.jpg'), 'JPEG')
+        
