@@ -1,111 +1,97 @@
-'''
-A Convolutional Network implementation example using TensorFlow library.
-This example is using the MNIST database of handwritten digits (http://yann.lecun.com/exdb/mnist/)
-Author: Aymeric Damien
-Project: https://github.com/aymericdamien/TensorFlow-Examples/
-'''
-
-# Import MINST data
-import input_data
-mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
-
 import tensorflow as tf
+import cigar_input as ci
+import numpy as np
+import sys, random
 
-# Parameters
-learning_rate = 0.001
-training_iters = 100000
-batch_size = 128
-display_step = 10
+def get_random_subset(batchSize, features, labels):
+  '''
+  Summary: Take a random subset of our training data for 1 epoch of training
+  Input:
+    batchSize: Integer. How many samples are requested
+  Output: Pair of features and labels of size batchSize
+  '''
+  # Shuffle indexes
+  indexes = [i for i in range(features.shape[0])]
+  random.shuffle(indexes)
+  # Get first batchSize number of random indexes
+  tempIndexes = indexes[:batchSize]
+  # Return matching pairs of features and labels based on random indexes
+  return features[tempIndexes,:], labels[tempIndexes,:]
+  
 
-# Network Parameters
-n_input = 784 # MNIST data input (img shape: 28*28)
-n_classes = 10 # MNIST total classes (0-9 digits)
-dropout = 0.75 # Dropout, probability to keep units
+def get_test_train_sets(path):
+  # Load in all labels and all features from images in folder
+  allFeatures,allLabels = ci.main(path)
 
-# tf Graph input
-x = tf.placeholder(tf.types.float32, [None, n_input])
-y = tf.placeholder(tf.types.float32, [None, n_classes])
-keep_prob = tf.placeholder(tf.types.float32) #dropout (keep probability)
+  # Get total number of images, as well as percentge of pictures for testing
+  totalRecords = allLabels.shape[0]
+  testPercentage = .10
+  testRecordCount = int(totalRecords * testPercentage)
 
-# Create model
-def conv2d(img, w, b):
-    return tf.nn.relu(tf.nn.bias_add(tf.nn.conv2d(img, w, strides=[1, 1, 1, 1], padding='SAME'),b))
+  # Split into test and training sets (labels and features)
+  indexes = range(totalRecords)
+  indexes = [i for i in indexes]
+  random.shuffle(indexes)
 
-def max_pool(img, k):
-    return tf.nn.max_pool(img, ksize=[1, k, k, 1], strides=[1, k, k, 1], padding='SAME')
+  # Make testing set
+  testIndexes = indexes[:testRecordCount]
+  testFeatures, testLabels = allFeatures[testIndexes,:], allLabels[testIndexes,:]
 
-def conv_net(_X, _weights, _biases, _dropout):
-    # Reshape input picture
-    _X = tf.reshape(_X, shape=[-1, 28, 28, 1])
+  # Make training set
+  trainFeatures = np.delete(allFeatures, testIndexes,axis=0)
+  trainLabels = np.delete(allLabels, testIndexes,axis=0)
 
-    # Convolution Layer
-    conv1 = conv2d(_X, _weights['wc1'], _biases['bc1'])
-    # Max Pooling (down-sampling)
-    conv1 = max_pool(conv1, k=2)
-    # Apply Dropout
-    conv1 = tf.nn.dropout(conv1, _dropout)
+  return trainFeatures, trainLabels, testFeatures, testLabels
 
-    # Convolution Layer
-    conv2 = conv2d(conv1, _weights['wc2'], _biases['bc2'])
-    # Max Pooling (down-sampling)
-    conv2 = max_pool(conv2, k=2)
-    # Apply Dropout
-    conv2 = tf.nn.dropout(conv2, _dropout)
 
-    # Fully connected layer
-    dense1 = tf.reshape(conv2, [-1, _weights['wd1'].get_shape().as_list()[0]]) # Reshape conv2 output to fit dense layer input
-    dense1 = tf.nn.relu(tf.add(tf.matmul(dense1, _weights['wd1']), _biases['bd1'])) # Relu activation
-    dense1 = tf.nn.dropout(dense1, _dropout) # Apply Dropout
 
-    # Output, class prediction
-    out = tf.add(tf.matmul(dense1, _weights['out']), _biases['out'])
-    return out
+if __name__ == "__main__":
+  # Path to folder containing all data  
+  path = sys.argv[1]
 
-# Store layers weight & bias
-weights = {
-    'wc1': tf.Variable(tf.random_normal([5, 5, 1, 32])), # 5x5 conv, 1 input, 32 outputs
-    'wc2': tf.Variable(tf.random_normal([5, 5, 32, 64])), # 5x5 conv, 32 inputs, 64 outputs
-    'wd1': tf.Variable(tf.random_normal([7*7*64, 1024])), # fully connected, 7*7*64 inputs, 1024 outputs
-    'out': tf.Variable(tf.random_normal([1024, n_classes])) # 1024 inputs, 10 outputs (class prediction)
-}
+  trainFeatures,trainLabels,testFeatures,testLabels = get_test_train_sets(path)
 
-biases = {
-    'bc1': tf.Variable(tf.random_normal([32])),
-    'bc2': tf.Variable(tf.random_normal([64])),
-    'bd1': tf.Variable(tf.random_normal([1024])),
-    'out': tf.Variable(tf.random_normal([n_classes]))
-}
+  # Define our tensor to hold images. 16384 = pixels, None indicates
+  # we can hold any number of images
+  x = tf.placeholder(tf.float32, [None, 16384])
+  # Create the Variables for the weights and biases
+  W = tf.Variable(tf.zeros([16384, 4]))
+  b = tf.Variable(tf.zeros([4]))
+  # This is our prediction output
+  y = tf.nn.softmax(tf.matmul(x, W) + b)
+  # This will be our correct answers/output
+  y_ = tf.placeholder(tf.float32, [None, 4])
+  # Calculate cross entropy by taking the negative sum of our correct values
+  # multiplied by the log of our predictions
+  cross_entropy = -tf.reduce_sum(y_*tf.log(y))
+  # This is training the NN with backpropagation
+  train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
+  # Initializes all the variables we made above
+  init = tf.initialize_all_variables()
 
-# Construct model
-pred = conv_net(x, weights, biases, keep_prob)
+  # Create and launch the session
+  sess = tf.Session()
+  sess.run(init)
 
-# Define loss and optimizer
-cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))
-optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+  # Train. In this case, 1000 times
+  for i in range(100):
+    # Feeds in 1500 random images each time for training (stochastic training)
+    # batch_xs are our images (pixels), batch_ys are our correct outputs
+    batch_xs, batch_ys = get_random_subset(100, trainFeatures, trainLabels)
+    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
 
-# Evaluate model
-correct_pred = tf.equal(tf.argmax(pred,1), tf.argmax(y,1))
-accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.types.float32))
+  # tf.argmax gives the index of the highest entry in a tensor along some axis
+  # argmax (y, 1) gives the label our model said was right, argmax(y_, 1) is the
+  # correct label. tf.equal sees if these two are the same
+  # This returns a list of booleans saying if it's true or false (predicted or
+  # not)
+  correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
 
-# Initializing the variables
-init = tf.initialize_all_variables()
+  # False is 0 and True is 1, what was our average?
+  accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
-# Launch the graph
-with tf.Session() as sess:
-    sess.run(init)
-    step = 1
-    # Keep training until reach max iterations
-    while step * batch_size < training_iters:
-        batch_xs, batch_ys = mnist.train.next_batch(batch_size)
-        # Fit training using batch data
-        sess.run(optimizer, feed_dict={x: batch_xs, y: batch_ys, keep_prob: dropout})
-        if step % display_step == 0:
-            # Calculate batch accuracy
-            acc = sess.run(accuracy, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
-            # Calculate batch loss
-            loss = sess.run(cost, feed_dict={x: batch_xs, y: batch_ys, keep_prob: 1.})
-            print "Iter " + str(step*batch_size) + ", Minibatch Loss= " + "{:.6f}".format(loss) + ", Training Accuracy= " + "{:.5f}".format(acc)
-        step += 1
-    print "Optimization Finished!"
-    # Calculate accuracy for 256 mnist test images
-    print "Testing Accuracy:", sess.run(accuracy, feed_dict={x: mnist.test.images[:256], y: mnist.test.labels[:256], keep_prob: 1.})
+  # How well did we do?
+  print(sess.run(accuracy, feed_dict={x: testFeatures, y_: testLabels}))
+
+  # Close the session (self documenting code)
+  sess.close()
