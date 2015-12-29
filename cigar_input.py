@@ -59,10 +59,7 @@ def plot_image(image):
     print('GRAYSCALE IMAGE... dont know how to show')
 
 
-if __name__ == '__main__':
-  import sys
-  path = sys.argv[1]
-
+def main(path):
   filePaths = glob.glob(path + '*.jpg')
   numImgs = len(filePaths)
 
@@ -80,9 +77,4 @@ if __name__ == '__main__':
 
     features[i,:] = img
     labels[i,:] = labelVec
-
-  print(labels.shape)
-  print(features.shape)
-
-
-
+  return labels, features
