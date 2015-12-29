@@ -72,11 +72,11 @@ init = tf.initialize_all_variables()
 sess = tf.Session()
 sess.run(init)
 
-# Train. In this case, 500 times
-for i in range(500):
-  # Feeds in 100 random images each time for training (stochastic training)
+# Train. In this case, 1000 times
+for i in range(1000):
+  # Feeds in 1500 random images each time for training (stochastic training)
   # batch_xs are our images (pixels), batch_ys are our correct outputs
-  batch_xs, batch_ys = get_random_subset(100, allFeatures, allLabels, indexes)
+  batch_xs, batch_ys = get_random_subset(1500, allFeatures, allLabels, indexes)
   sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
   
 # tf.argmax gives the index of the highest entry in a tensor along some axis
