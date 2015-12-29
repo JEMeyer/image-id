@@ -77,4 +77,4 @@ def main(path):
 
     features[i,:] = img
     labels[i,:] = labelVec
-  return labels, features
+  return features,labels
