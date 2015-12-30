@@ -69,13 +69,13 @@ def max_pool_2x2(x):
 sess = tf.InteractiveSession()
 
 path = sys.argv[1]
-numEpochs = 10
-trainBatchSize = 200
+numEpochs = 5
+trainBatchSize = 128
 numLabels = 4
 inputPixels = 128
 numColorChannels = 1
-numFilters1 = 5
-numFilters2 = 10
+numFilters1 = 10
+numFilters2 = 20
 convPixels1 = 5
 convPixels2 = 5
 poolSize1 = 2
@@ -161,3 +161,6 @@ for i in range(numEpochs):
       x:batch_xs, y_: batch_ys, keep_prob: 1.0})
     print("step %d, training accuracy %g"%(i, train_accuracy))
   train_step.run(feed_dict={x: batch_xs, y_: batch_ys, keep_prob: 0.5})
+
+print('Results of test run after training')  
+print(sess.run(accuracy, feed_dict={x: testFeatures, y_: testLabels, keep_prob: 1.0}))
