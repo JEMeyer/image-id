@@ -74,10 +74,10 @@ if __name__ == "__main__":
   sess.run(init)
 
   # Train. In this case, 1000 times
-  for i in range(100):
+  for i in range(1000):
     # Feeds in 1500 random images each time for training (stochastic training)
     # batch_xs are our images (pixels), batch_ys are our correct outputs
-    batch_xs, batch_ys = get_random_subset(100, trainFeatures, trainLabels)
+    batch_xs, batch_ys = get_random_subset(3000, trainFeatures, trainLabels)
     sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
 
   # tf.argmax gives the index of the highest entry in a tensor along some axis

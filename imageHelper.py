@@ -80,9 +80,12 @@ if __name__ == '__main__':
         abspath = os.path.dirname(file)
 
         # do relevant tranformations on image
-        #smallImg = resize_img(infile, newSize=(128,128))
-        #squareImg = paste_img_on_background(smallImg,backgroundSize=(128,128))
-        #newImg = convert_color_of_img(squareImg,'gray')
+        smallImg = resize_img(infile, newSize=(128,128))
+        squareImg = paste_img_on_background(smallImg,backgroundSize=(128,128))
+        newImg = convert_color_of_img(squareImg,'gray')
+        #Save normalized normal image
+        abspath = '/home/joe/Projects/Python/CigarID/data/'
+        #newImg.save(os.path.join(abspath, '__new__' + base + '.jpg'), 'JPEG')
         newImg = flip_image(infile, 'lr')
         # save new image
         newImg.save(os.path.join(abspath, '_lr_' + base + '.jpg'), 'JPEG')
