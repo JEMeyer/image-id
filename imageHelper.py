@@ -56,8 +56,10 @@ def flip_image(imgFile, direction):
     direction: String. Can be lr, tb, r90, r180, or r270, depending on the
         desired tranformations
     '''
-    img = Image.open(imgFile)
-    # I hate no case statements
+    if isinstance(imgFile, str):
+        img = Image.open(imgFile)
+    else:
+        img = imgFile
     if direction == 'lr':
         img = img.transpose(Image.FLIP_LEFT_RIGHT)
     elif direction == 'tb':
@@ -70,39 +72,68 @@ def flip_image(imgFile, direction):
         img = img.transpose(Image.ROTATE_270)
     return img
 
+
+
+def blend_two_images(imgFile1, imgFile2):
+    '''
+    imgFile(1|2): String or ImageFile 
+                  The absolute path to an image, or an JpegImageFile
+    '''
+    if isinstance(imgFile1, str):
+        background = Image.open(imgFile1)
+        overlay = Image.open(imgFile2)
+    else:
+        background = imgFile1
+        overlay = imgFile2
+
+    background = background.convert("RGBA")
+    overlay = overlay.convert("RGBA")
+
+    img = Image.blend(background, overlay, 0.5)
+    return img
+
+def do_all_the_transforms(imgFile, base, abspath):
+    '''
+    Input: 
+      imgFile: a path to an image or an image object
+      base: the basename of the filepath
+      abspath: the absolute path to the file
+    Output: 
+      transformed and translated images are saved to same dir as org image
+    '''
+    # do relevant tranformations on image before translations
+    smallImg = resize_img(imgFile, newSize=(128,128))
+    squareImg = paste_img_on_background(smallImg,backgroundSize=(128,128))
+    newImg = convert_color_of_img(squareImg,'gray')
+
+    newImg = flip_image(img, 'lr')
+    newImg.save(os.path.join(abspath, '_lr_' + base + '.jpg'), 'JPEG')
+
+    newImg = flip_image(img, 'tb')
+    newImg.save(os.path.join(abspath, '_tb_' + base + '.jpg'), 'JPEG')
+
+    newImg = flip_image(img, 'r90')
+    newImg.save(os.path.join(abspath, '_r90_' + base + '.jpg'), 'JPEG')
+
+    newImg = flip_image(img, 'r180')
+    newImg.save(os.path.join(abspath, '_r180_' + base + '.jpg'), 'JPEG')
+
+    newImg = flip_image(img, 'r270')
+    newImg.save(os.path.join(abspath, '_r270_' + base + '.jpg'), 'JPEG')
+
 if __name__ == '__main__':
     dir = sys.argv[1]
     
-    for infile in glob.glob(dir + '*.jpg'):
-        # read in file and split path apart
-        file, ext = os.path.splitext(infile)
-        base = os.path.basename(file)
-        abspath = os.path.dirname(file)
+    i = 0
+    for infile1 in glob.glob(dir + '*.jpg'):
+        for infile2 in glob.glob(dir + '*.jpg'):
+            # read in file and split path apart
+            file2, ext2 = os.path.splitext(infile2)
+            abspath = os.path.dirname(file2)
+            newImg = blend_two_images(infile1,infile2)
+            newImg.save(os.path.join(abspath, 'parejo__' + str(i) + '.jpg'), 
+                        'JPEG')
+    
 
-        # do relevant tranformations on image
-        smallImg = resize_img(infile, newSize=(128,128))
-        squareImg = paste_img_on_background(smallImg,backgroundSize=(128,128))
-        newImg = convert_color_of_img(squareImg,'gray')
-        #Save normalized normal image
-        abspath = '/home/joe/Projects/Python/CigarID/data/'
-        #newImg.save(os.path.join(abspath, '__new__' + base + '.jpg'), 'JPEG')
-        newImg = flip_image(infile, 'lr')
-        # save new image
-        newImg.save(os.path.join(abspath, '_lr_' + base + '.jpg'), 'JPEG')
-        #newImg = convert_color_of_img(squareImg,'gray')
-        newImg = flip_image(infile, 'tb')
-        # save new image
-        newImg.save(os.path.join(abspath, '_tb_' + base + '.jpg'), 'JPEG')
-        #newImg = convert_color_of_img(squareImg,'gray')
-        newImg = flip_image(infile, 'r90')
-        # save new image
-        newImg.save(os.path.join(abspath, '_r90_' + base + '.jpg'), 'JPEG')
-        #newImg = convert_color_of_img(squareImg,'gray')
-        newImg = flip_image(infile, 'r180')
-        # save new image
-        newImg.save(os.path.join(abspath, '_r180_' + base + '.jpg'), 'JPEG')
-        #newImg = convert_color_of_img(squareImg,'gray')
-        newImg = flip_image(infile, 'r270')
-        # save new image
-        newImg.save(os.path.join(abspath, '_r270_' + base + '.jpg'), 'JPEG')
+
         

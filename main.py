@@ -2,6 +2,7 @@ import tensorflow as tf
 import cigar_input as ci
 import numpy as np
 import sys, random
+from input_data import DocReader
 
 def get_random_subset(batchSize, features, labels):
   '''
@@ -35,32 +36,53 @@ def get_test_train_sets(path):
 
   # Make testing set
   testIndexes = indexes[:testRecordCount]
-  testFeatures, testLabels = allFeatures[testIndexes,:], allLabels[testIndexes,:]
+  testX, testY = allFeatures[testIndexes,:], allLabels[testIndexes,:]
 
   # Make training set
-  trainFeatures = np.delete(allFeatures, testIndexes,axis=0)
-  trainLabels = np.delete(allLabels, testIndexes,axis=0)
+  trainX = np.delete(allFeatures, testIndexes,axis=0)
+  trainY = np.delete(allLabels, testIndexes,axis=0)
 
-  return trainFeatures, trainLabels, testFeatures, testLabels
+  return trainX,trainY,testX,testY
 
-
+def parse_user_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-ham','--hamDir')
+    parser.add_argument('-spam','--spamDir')
+    args = parser.parse_args()
+    return args
 
 if __name__ == "__main__":
   # Path to folder containing all data  
-  path = sys.argv[1]
+  import sys, argparse
+  # get user input
+  args = parse_user_args()
+  hamDir = args.hamDir
+  spamDir= args.spamDir
 
-  trainFeatures,trainLabels,testFeatures,testLabels = get_test_train_sets(path)
+  reader = DocReader()
+  trainX,trainY,testX,testY = reader.input_data(hamDir=hamDir,
+                                                spamDir=spamDir,
+                                                percentTest=.1,
+                                                cutoff=15)
+  # trainX,trainY,testX,testY =get_test_train_sets(path)
+
+
+  print(trainY[:10,:])
+  numFeatures = trainX.shape[1]
+  numLabels = trainY.shape[1]
+  print(trainX.shape)
+  print(trainY.shape)
 
   # Define our tensor to hold images. 16384 = pixels, None indicates
   # we can hold any number of images
-  x = tf.placeholder(tf.float32, [None, 16384])
+  x = tf.placeholder(tf.float32, [None, numFeatures])
   # Create the Variables for the weights and biases
-  W = tf.Variable(tf.zeros([16384, 4]))
-  b = tf.Variable(tf.zeros([4]))
+  W = tf.Variable(tf.zeros([numFeatures, numLabels]))
+  b = tf.Variable(tf.zeros([numLabels]))
   # This is our prediction output
   y = tf.nn.softmax(tf.matmul(x, W) + b)
   # This will be our correct answers/output
-  y_ = tf.placeholder(tf.float32, [None, 4])
+  y_ = tf.placeholder(tf.float32, [None, numLabels])
   # Calculate cross entropy by taking the negative sum of our correct values
   # multiplied by the log of our predictions
   cross_entropy = -tf.reduce_sum(y_*tf.log(y))
@@ -68,17 +90,6 @@ if __name__ == "__main__":
   train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
   # Initializes all the variables we made above
   init = tf.initialize_all_variables()
-
-  # Create and launch the session
-  sess = tf.Session()
-  sess.run(init)
-
-  # Train. In this case, 1000 times
-  for i in range(1000):
-    # Feeds in 1500 random images each time for training (stochastic training)
-    # batch_xs are our images (pixels), batch_ys are our correct outputs
-    batch_xs, batch_ys = get_random_subset(3000, trainFeatures, trainLabels)
-    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
 
   # tf.argmax gives the index of the highest entry in a tensor along some axis
   # argmax (y, 1) gives the label our model said was right, argmax(y_, 1) is the
@@ -90,8 +101,24 @@ if __name__ == "__main__":
   # False is 0 and True is 1, what was our average?
   accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
+  # Create and launch the session
+  sess = tf.Session()
+  sess.run(init)
+
+  # Train. In this case, 1000 times
+  for i in range(1000):
+    # Feeds in 1500 random images each time for training (stochastic training)
+    # batch_xs are our images (pixels), batch_ys are our correct outputs
+    batch_xs, batch_ys = get_random_subset(500, trainX, trainY)
+    if i%100 == 0:
+      train_accuracy =  sess.run(accuracy,feed_dict={x: batch_xs, y_: batch_ys})
+      print("step %d, training accuracy %g"%(i, train_accuracy))
+    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+
+
+
   # How well did we do?
-  print(sess.run(accuracy, feed_dict={x: testFeatures, y_: testLabels}))
+  print(sess.run(accuracy, feed_dict={x: testX, y_: testY}))
 
   # Close the session (self documenting code)
   sess.close()

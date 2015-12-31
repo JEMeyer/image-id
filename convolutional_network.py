@@ -70,12 +70,12 @@ sess = tf.InteractiveSession()
 
 path = sys.argv[1]
 numEpochs = 10
-trainBatchSize = 200
+trainBatchSize = 2000
 numLabels = 4
 inputPixels = 128
 numColorChannels = 1
-numFilters1 = 5
-numFilters2 = 10
+numFilters1 = 10
+numFilters2 = 20
 convPixels1 = 5
 convPixels2 = 5
 poolSize1 = 2
