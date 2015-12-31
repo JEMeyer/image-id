@@ -2,7 +2,7 @@ import tensorflow as tf
 import cigar_input as ci
 import numpy as np
 import sys, random
-from input_data import DocReader
+from email_input import DocReader
 
 def get_random_subset(batchSize, features, labels):
   '''
@@ -67,11 +67,8 @@ if __name__ == "__main__":
   # trainX,trainY,testX,testY =get_test_train_sets(path)
 
 
-  print(trainY[:10,:])
   numFeatures = trainX.shape[1]
   numLabels = trainY.shape[1]
-  print(trainX.shape)
-  print(trainY.shape)
 
   # Define our tensor to hold images. 16384 = pixels, None indicates
   # we can hold any number of images

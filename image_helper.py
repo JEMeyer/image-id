@@ -1,6 +1,6 @@
 import os, sys, glob
 from PIL import Image
-
+import random
 
 def resize_img(imgFile,newSize):
     '''
@@ -72,8 +72,6 @@ def flip_image(imgFile, direction):
         img = img.transpose(Image.ROTATE_270)
     return img
 
-
-
 def blend_two_images(imgFile1, imgFile2):
     '''
     imgFile(1|2): String or ImageFile 
@@ -123,17 +121,17 @@ def do_all_the_transforms(imgFile, base, abspath):
 
 if __name__ == '__main__':
     dir = sys.argv[1]
-    
-    i = 0
-    for infile1 in glob.glob(dir + '*.jpg'):
-        for infile2 in glob.glob(dir + '*.jpg'):
-            # read in file and split path apart
-            file2, ext2 = os.path.splitext(infile2)
-            abspath = os.path.dirname(file2)
-            newImg = blend_two_images(infile1,infile2)
-            newImg.save(os.path.join(abspath, 'parejo__' + str(i) + '.jpg'), 
-                        'JPEG')
-    
 
+    i=0
+    allFiles = glob.glob(dir + '*.jpg')
 
+    for infile1 in allFiles:
+        newImg = convert_color_of_img(infile1, 'gray')
+        newImg.save(infile1, 'JPEG')
+        # sys.exit()
+        # for infile2 in random.sample(allFiles,4):
+        #     i+=1
+        #     newImg = blend_two_images(infile1,infile2)
+        #     newImg.save('/home/josh/Desktop/new_perfecto/perfecto__'+str(i)+'.jpg',
+        #                 'JPEG')
         
