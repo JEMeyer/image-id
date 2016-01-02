@@ -44,8 +44,10 @@ def max_pool_2x2(x):
 
 def parse_user_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-train','--trainDir')
-    parser.add_argument('-test','--testDir')
+    parser.add_argument('-train','--trainDir', type=str)
+    parser.add_argument('-test','--testDir', type=str)
+    parser.add_argument('-e','--numEpochs', type=int)
+    parser.add_argument('-bs','--trainBatchSize', type=int)
     args = parser.parse_args()
     return args
 
@@ -55,11 +57,11 @@ def run():
 
   trainDir = args.trainDir
   testDir = args.testDir
+  numEpochs = args.numEpochs
+  trainBatchSize = args.trainBatchSize
 
   sess = tf.InteractiveSession()
 
-  numEpochs = 1000
-  trainBatchSize = 100
   numLabels = 4
   inputPixels = 128
   numColorChannels = 1
@@ -139,6 +141,7 @@ def run():
   accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
 
+  output = open('output.txt', 'w')
   sess.run(tf.initialize_all_variables())
 
   for subDir in os.listdir(trainDir):
@@ -148,22 +151,24 @@ def run():
 
     for i in range(numEpochs):
       batch_xs, batch_ys = get_random_subset(trainBatchSize,trainX,trainY)
-      if i%100 == 0:
-        # use keep_prob in feed_dict to control dropout rate
-        train_accuracy = accuracy.eval(feed_dict={
-          x:batch_xs, y_: batch_ys, keep_prob: 1.0})
-        print("step %d, training accuracy %g"%(i, train_accuracy))
       train_step.run(feed_dict={x: batch_xs, y_: batch_ys, keep_prob: 0.5})
 
-  for subDir in os.listdir(testDir):
-    dataPath = os.path.join(testDir,subDir)
-    print(dataPath)
-    testX,testY = ci.input_data(dataPath)
+      if i%100 == 0:
+        # use keep_prob in feed_dict to control dropout rate
+        train_accuracy = accuracy.eval(feed_dict={x:batch_xs, 
+                                                  y_: batch_ys, 
+                                                  keep_prob: 1.0})
 
-    print('Results of test run after training')  
-    print(sess.run(accuracy, feed_dict={x: testX, 
-                                        y_: testY, 
-                                        keep_prob: 1.0}))
+        print("step %d, training accuracy %g"%(i, train_accuracy))
+
+        for subDir in os.listdir(testDir):
+          dataPath = os.path.join(testDir,subDir)
+          testX,testY = ci.input_data(dataPath)
+          test_accuracy = accuracy.eval(feed_dict={x: testX, 
+                                                   y_: testY, 
+                                                   keep_prob: 1.0})
+        print((str(i) +'\t'+ str(train_accuracy) +'\t'+ str(test_accuracy)),
+              file=output)
 
 if __name__ == "__main__":
   run()
