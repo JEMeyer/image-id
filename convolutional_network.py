@@ -58,8 +58,8 @@ def run():
 
   sess = tf.InteractiveSession()
 
-  numEpochs = 10
-  trainBatchSize = 10
+  numEpochs = 1000
+  trainBatchSize = 100
   numLabels = 4
   inputPixels = 128
   numColorChannels = 1
@@ -148,7 +148,7 @@ def run():
 
     for i in range(numEpochs):
       batch_xs, batch_ys = get_random_subset(trainBatchSize,trainX,trainY)
-      if i%1 == 0:
+      if i%100 == 0:
         # use keep_prob in feed_dict to control dropout rate
         train_accuracy = accuracy.eval(feed_dict={
           x:batch_xs, y_: batch_ys, keep_prob: 1.0})
