@@ -104,19 +104,23 @@ def do_all_the_transforms(imgFile, base, abspath):
     squareImg = paste_img_on_background(smallImg,backgroundSize=(128,128))
     newImg = convert_color_of_img(squareImg,'gray')
 
-    newImg = flip_image(img, 'lr')
+    newImg.save(os.path.join(abspath, '_gray_' + base + '.jpg'), 'JPEG')
+
+    imgFile = newImg
+
+    newImg = flip_image(imgFile, 'lr')
     newImg.save(os.path.join(abspath, '_lr_' + base + '.jpg'), 'JPEG')
 
-    newImg = flip_image(img, 'tb')
+    newImg = flip_image(imgFile, 'tb')
     newImg.save(os.path.join(abspath, '_tb_' + base + '.jpg'), 'JPEG')
 
-    newImg = flip_image(img, 'r90')
+    newImg = flip_image(imgFile, 'r90')
     newImg.save(os.path.join(abspath, '_r90_' + base + '.jpg'), 'JPEG')
 
-    newImg = flip_image(img, 'r180')
+    newImg = flip_image(imgFile, 'r180')
     newImg.save(os.path.join(abspath, '_r180_' + base + '.jpg'), 'JPEG')
 
-    newImg = flip_image(img, 'r270')
+    newImg = flip_image(imgFile, 'r270')
     newImg.save(os.path.join(abspath, '_r270_' + base + '.jpg'), 'JPEG')
 
 if __name__ == '__main__':
@@ -126,12 +130,14 @@ if __name__ == '__main__':
     allFiles = glob.glob(dir + '*.jpg')
 
     for infile1 in allFiles:
-        newImg = convert_color_of_img(infile1, 'gray')
-        newImg.save(infile1, 'JPEG')
+        abspath, base = os.path.split(infile1)
+        base = base[:-4]
+        img = convert_color_of_img(infile1,'gray')
+        img.save(infile1, 'JPEG')
+        #do_all_the_transforms(infile1, base, abspath)
         # sys.exit()
-        # for infile2 in random.sample(allFiles,4):
+        # for infile2 in random.sample(allFiles,1):
         #     i+=1
         #     newImg = blend_two_images(infile1,infile2)
-        #     newImg.save('/home/josh/Desktop/new_perfecto/perfecto__'+str(i)+'.jpg',
-        #                 'JPEG')
+        #     newImg.save('/home/joe/Documents/cigar_data/new_parejo/parejo__'+str(i)+'.jpg', 'JPEG')
         
