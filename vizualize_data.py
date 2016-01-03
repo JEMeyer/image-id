@@ -32,8 +32,21 @@ def plot_points(data):
     plt.legend(['Training Accuracy', 'Testing Accuracy'], loc='upper left')
     plt.show()
 
+def plot_1D_points(points):
+    '''
+    where 'points' is a list of [y_1...y_n] points,
+    plot them in 2D space, using their index in the list as
+    the x value, and the point, y_n, as the y value
+    '''
+    fig = plt.figure()
+    x,y = zip(*[(x,y) for x,y in enumerate(points)])
+    ax = fig.gca()
+    ax.plot(x,y)
+    ax.legend()
+    plt.show()
+
 if __name__ == "__main__":
     import sys
     path = sys.argv[1]
     data = load_points(path)
-    plot_points(data)
+    plot_1D_points(data)

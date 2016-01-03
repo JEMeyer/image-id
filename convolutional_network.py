@@ -1,5 +1,6 @@
 import tensorflow as tf
-import plant_input as pi
+# import plant_input as pi
+import cigar_input as pi
 import numpy as np
 import sys, random
 import os
@@ -61,6 +62,8 @@ def parse_user_args():
 
 
 def run():
+    sess = tf.InteractiveSession()
+
     args = parse_user_args()
 
     trainDir = args.trainDir
@@ -172,7 +175,7 @@ def run():
     ###
     W_fc2 = weight_variable([numNeurons, numLabels])
     b_fc2 = bias_variable([numLabels])
-    y_conv=tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
+    y_conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 
 
     ###
@@ -193,12 +196,12 @@ def run():
     ###
   
     output = open('output.txt', 'w')
+
     sess = tf.InteractiveSession()
     sess.run(tf.initialize_all_variables())
 
     for subDir in os.listdir(trainDir):
         dataPath = os.path.join(trainDir,subDir)
-        print(dataPath)
         trainX,trainY = pi.input_data(dataPath)
 
         for i in range(numEpochs):
