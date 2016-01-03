@@ -1,6 +1,5 @@
 import tensorflow as tf
-# import cigar_input as ci
-import plant_input as ci
+import plant_input as pi
 import numpy as np
 import sys, random
 import os
@@ -70,7 +69,7 @@ def run():
     numConvs1 = args.numConvs1
     numConvs2 = args.numConvs2
 
-    numLabels = 4
+    numLabels = 2
     inputPixels = 128
     numColorChannels = 1
 
@@ -197,7 +196,7 @@ def run():
     for subDir in os.listdir(trainDir):
         dataPath = os.path.join(trainDir,subDir)
         print(dataPath)
-        trainX,trainY = ci.input_data(dataPath)
+        trainX,trainY = pi.input_data(dataPath)
 
         for i in range(numEpochs):
             batch_xs, batch_ys = get_random_subset(trainBatchSize,trainX,trainY)
@@ -212,7 +211,7 @@ def run():
 
                 for subDir in os.listdir(testDir):
                     dataPath = os.path.join(testDir,subDir)
-                    testX,testY = ci.input_data(dataPath)
+                    testX,testY = pi.input_data(dataPath)
                     test_accuracy = accuracy.eval(feed_dict={x: testX, 
                                                              y_: testY, 
                                                              keep_prob: 1.0})
