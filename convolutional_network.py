@@ -146,8 +146,8 @@ def run():
     ###
 
     W_fc1 = weight_variable([reducedImagePixels**2 * numFilters2,
-                             inputPixels**2])
-    b_fc1 = bias_variable([inputPixels**2])
+                             numFilters1**2])
+    b_fc1 = bias_variable([numFilters1**2])
     # We reshape the tensor from the pooling layer into a batch of vectors,
     # multiply by a weight matrix, add a bias, and apply a ReLU
     h_pool2_flat = tf.reshape(h_pool2, [-1,reducedImagePixels**2 * numFilters2])
@@ -166,7 +166,7 @@ def run():
     ###
     ### FINAL SOFTMAX LAYER
     ###
-    W_fc2 = weight_variable([inputPixels**2, numLabels])
+    W_fc2 = weight_variable([numFilters1**2, numLabels])
     b_fc2 = bias_variable([numLabels])
     y_conv=tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 
