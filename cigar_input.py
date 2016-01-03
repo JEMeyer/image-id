@@ -13,14 +13,10 @@ def input_data(path):
   features = np.empty(shape = (numImgs,16384))
 
   for i,imagePath in enumerate(filePaths):
-    if 'torpedo' in imagePath:
+    if 'perfecto' in imagePath:
       labelVec = [1,0,0,0]
-    elif 'perfecto' in imagePath:
-      labelVec = [0,1,0,0]
-    elif 'pyramid' in imagePath:
-      labelVec = [0,0,1,0]
     elif 'parejo' in imagePath:
-      labelVec = [0,0,0,1]
+      labelVec = [0,1,0,0]
 
     # if we load one image at a time, this is much faster than load_images()
     img = np.asarray(Image.open(imagePath)).ravel()
