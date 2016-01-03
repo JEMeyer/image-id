@@ -5,6 +5,7 @@ import sys, random
 import os
 import argparse
 
+
 def get_random_subset(batchSize, features, labels):
     '''
     Summary: Take a random subset of our training data for 1 epoch of training
@@ -181,8 +182,8 @@ def run():
     # added a very small value for numerical stability
     cross_entropy = -tf.reduce_sum(y_*tf.log(y_conv + 1e-9))
     # We use the ADAM optimizer instead of steepest gradient descent
-    # train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
-    train_step = tf.train.GradientDescentOptimizer(1e-4).minimize(cross_entropy)
+    train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
+    #train_step = tf.train.GradientDescentOptimizer(1e-4).minimize(cross_entropy)
     correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_,1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
   
@@ -192,7 +193,6 @@ def run():
     ###
   
     output = open('output.txt', 'w')
-
     sess = tf.InteractiveSession()
     sess.run(tf.initialize_all_variables())
 
@@ -203,15 +203,19 @@ def run():
 
         for i in range(numEpochs):
             batch_xs, batch_ys = get_random_subset(trainBatchSize,trainX,trainY)
-
+            
+            a, b = sess.run([cross_entropy,train_step], feed_dict={x: batch_xs, 
+                            y_: batch_ys, 
+                            keep_prob: 0.5})
+                            
             if i%10 == 0:
                 # use keep_prob in feed_dict to control dropout rate
                 train_accuracy = accuracy.eval(feed_dict={x: batch_xs,
                                                           y_: batch_ys,
                                                           keep_prob: 1.0})
 
-                print("step %d, training accuracy %g"%(i, train_accuracy))
-
+                #print("step %d, training accuracy %g"%(i, train_accuracy))
+                print("cost " + str(a))
                 for subDir in os.listdir(testDir):
                     dataPath = os.path.join(testDir,subDir)
                     testX,testY = pi.input_data(dataPath)
@@ -222,9 +226,11 @@ def run():
                            str(train_accuracy) +'\t'+ 
                            str(test_accuracy)),
                           file=output)
+                          
+                    if i % 200 == 0:
+                        print("step %d, testing accuracy %g"%(i, test_accuracy))
 
-            train_step.run(feed_dict={x: batch_xs, 
-                                      y_: batch_ys, 
-                                      keep_prob: 0.5})
+    output.close()
+    
 if __name__ == "__main__":
     run()
