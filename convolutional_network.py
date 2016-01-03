@@ -4,6 +4,7 @@ import numpy as np
 import sys, random
 import os
 import argparse
+from time import gmtime, strftime
 
 
 def get_random_subset(batchSize, features, labels):
@@ -192,7 +193,9 @@ def run():
     ### TRAINING
     ###
   
-    output = open('output.txt', 'w')
+    output = open('output_data/output_'+strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    + '_' + str(trainBatchSize) +'_' + str(numEpochs) +'_' + str(numConvs1)+'_'
+    + str(numConvs2) +'.txt', 'w')
     sess = tf.InteractiveSession()
     sess.run(tf.initialize_all_variables())
 

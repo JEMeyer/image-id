@@ -49,4 +49,4 @@ if __name__ == "__main__":
     import sys
     path = sys.argv[1]
     data = load_points(path)
-    plot_1D_points(data)
+    plot_points(data)
