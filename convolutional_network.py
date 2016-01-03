@@ -1,5 +1,6 @@
 import tensorflow as tf
-import cigar_input as ci
+# import cigar_input as ci
+import plant_input as ci
 import numpy as np
 import sys, random
 import os
@@ -178,7 +179,8 @@ def run():
     # added a very small value for numerical stability
     cross_entropy = -tf.reduce_sum(y_*tf.log(y_conv + 1e-9))
     # We use the ADAM optimizer instead of steepest gradient descent
-    train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
+    # train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
+    train_step = tf.train.GradientDescentOptimizer(1e-4).minimize(cross_entropy)
     correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_,1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
   
@@ -199,9 +201,6 @@ def run():
 
         for i in range(numEpochs):
             batch_xs, batch_ys = get_random_subset(trainBatchSize,trainX,trainY)
-            train_step.run(feed_dict={x: batch_xs, 
-                                      y_: batch_ys, 
-                                      keep_prob: 0.5})
 
             if i%10 == 0:
                 # use keep_prob in feed_dict to control dropout rate
@@ -222,6 +221,8 @@ def run():
                            str(test_accuracy)),
                           file=output)
 
-
+            train_step.run(feed_dict={x: batch_xs, 
+                                      y_: batch_ys, 
+                                      keep_prob: 0.5})
 if __name__ == "__main__":
     run()
