@@ -44,9 +44,31 @@ def plot_1D_points(points):
     ax.plot(x,y)
     ax.legend()
     plt.show()
+    
+def save_graph(data, title, output):
+    '''
+    Input:
+      data: np.ndarray. Matrix of data where each col is a dimension (x or y)
+    Returns:
+      Nothing
+    '''
+    numCols = data.shape[1]
+    x, y1, y2 = np.split(data, numCols, axis=1)
 
+    plt.plot(x,y1)
+    plt.plot(x,y2)
+
+    plt.xlabel('Number of Iterations', fontsize=14)
+    plt.ylabel('% Accuracy', fontsize=14)
+    plt.title(title, fontsize=18)
+
+    plt.legend(['Training Accuracy', 'Testing Accuracy'], loc='upper left')
+    plt.savefig(output, bbox_inches='tight')
+    
 if __name__ == "__main__":
     import sys
     path = sys.argv[1]
+    title = sys.argv[2]
+    output = sys.argv[3]
     data = load_points(path)
-    plot_points(data)
+    save_graph(data, title, output)
