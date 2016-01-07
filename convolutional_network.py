@@ -5,7 +5,8 @@ import sys, random
 import os
 import argparse
 from time import gmtime, strftime
-
+import glob
+from PIL import Image
 
 def get_random_subset(batchSize, features, labels):
     '''
@@ -78,8 +79,15 @@ def run():
     poolSize1 = args.poolSize1
     poolSize2 = args.poolSize2
 
+    # open up one of the images from training to check the pixel size
+    # this assumes that the images are squares and all images (in test and
+    # training) have the same dimensions
+    for i in glob.glob(os.path.join(trainDir,'**/*')):
+        if i.lower().endswith('.jpg'):
+            inputPixels = np.asarray(Image.open(i)).shape[0]
+            break
+
     numLabels = 2
-    inputPixels = 128
     numColorChannels = 1
 
     # number of neurons in the input layer to the softmax classifier
@@ -199,6 +207,7 @@ def run():
     output = open('output_data/output_'+strftime("%Y-%m-%d %H:%M:%S", gmtime())
     + '_' + str(trainBatchSize) +'_' + str(numEpochs) +'_' + str(numConvs1)+'_'
     + str(numConvs2) +'.txt', 'w')
+
     sess = tf.InteractiveSession()
     sess.run(tf.initialize_all_variables())
 

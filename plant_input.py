@@ -9,8 +9,11 @@ def input_data(path):
     filePaths = glob.glob(newPath)
     numImgs = len(filePaths)
 
+    # get numPixels from one image, all images must be square and same dimension
+    numPixels = np.asarray(Image.open(filePaths[0])).shape[0]
+
     labels = np.empty(shape = (numImgs,2))
-    features = np.empty(shape = (numImgs,16384))
+    features = np.empty(shape = (numImgs,numPixels**2))
 
     for i,imagePath in enumerate(filePaths):
         if 'pinoak' in imagePath:
