@@ -42,9 +42,12 @@ def conv2d(x, W):
     conv = tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
     return conv
 
-def max_pool_2x2(x):
-    pool = tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
-                          strides=[1, 2, 2, 1], padding='SAME')
+def max_pool(x, ps):
+    '''
+    x is image, ps is pool size
+    '''
+    pool = tf.nn.max_pool(x, ksize=[1, ps, ps, 1],
+                          strides=[1, ps, ps, 1], padding='SAME')
     return pool
 
 
@@ -54,8 +57,10 @@ def parse_user_args():
     parser.add_argument('-test','--testDir', type=str)
     parser.add_argument('-e','--numEpochs', type=int)
     parser.add_argument('-bs','--trainBatchSize', type=int)
-    parser.add_argument('-c1','--numConvs1', type=int)
-    parser.add_argument('-c2','--numConvs2', type=int)
+    parser.add_argument('-c1','--numConvs1', type=int, default = 10)
+    parser.add_argument('-c2','--numConvs2', type=int, default = 2)
+    parser.add_argument('-p1','--poolSize1', type=int, default = 2)
+    parser.add_argument('-p2','--poolSize2', type=int, default = 2)
 
     args = parser.parse_args()
     return args
@@ -70,6 +75,8 @@ def run():
     trainBatchSize = args.trainBatchSize
     numConvs1 = args.numConvs1
     numConvs2 = args.numConvs2
+    poolSize1 = args.poolSize1
+    poolSize2 = args.poolSize2
 
     numLabels = 2
     inputPixels = 128
@@ -88,10 +95,6 @@ def run():
     # number of pixels of our convolution patches for first and second layers
     patchSize1 = 5
     patchSize2 = 5
-    
-    # post-convolution pooling sizes
-    poolSize1 = 2
-    poolSize2 = 2
 
     # since we're doing padding around the edges our final reduced image is only
     # affected by the size of our poolings. If we were not padding feature maps
@@ -127,7 +130,7 @@ def run():
 
     h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
     # First pooling
-    h_pool1 = max_pool_2x2(h_conv1)
+    h_pool1 = max_pool(h_conv1, poolSize1)
 
 
     ###
@@ -143,7 +146,7 @@ def run():
 
     h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
     # Second pooling
-    h_pool2 = max_pool_2x2(h_conv2)
+    h_pool2 = max_pool(h_conv2, poolSize2)
 
 
     ###
