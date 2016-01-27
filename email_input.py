@@ -150,4 +150,13 @@ if __name__ == '__main__':
 
     print(trainX.shape)
     print(trainY.shape)    
+    print(testX.shape)
+    print(testY.shape)    
+
+    # np.savetxt("trainX.csv", trainX, delimiter="\t")
+    # np.savetxt("trainY.csv", trainY, delimiter="\t")
+    # np.savetxt("testX.csv", testX, delimiter="\t")
+    # np.savetxt("testY.csv", testY, delimiter="\t")
+
+    print(trainX[:10,:])
     print(trainY[:10,:])
